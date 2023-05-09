@@ -93,7 +93,6 @@ DELIMITER ;
 
 
 #inner join to view both customers and orders tables
-
 SELECT 
     c.*, o.*
 FROM
