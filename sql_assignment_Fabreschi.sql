@@ -52,6 +52,7 @@ VALUES (1, 1000, 382),
 (3, 1002, 382),
 (4, 1000, 385);
 
+
 CREATE TABLE orderDetails
 (order_nr INTEGER,
 product_id INTEGER,
@@ -66,6 +67,7 @@ VALUES (1, 1302, 5, 2000),
 (3, 1302, 2, 2000),
 (4, 1284, 500, 100);
 
+#procedure to view customer full name
 DELIMITER //
 CREATE PROCEDURE view_customers_sp()
 BEGIN
@@ -74,11 +76,15 @@ BEGIN
 end //
 DELIMITER ;
 
+#calling the procedure
 call view_customers_sp;
-select concatenate_name(c.first_name, c.surname) from customers c;
 
+#calling the function
+select concatenate_name_(c.first_name, c.surname) from customers c;
+
+#stored function
 DELIMITER //
-CREATE FUNCTION concatenate_name(first_nm CHAR(24), last_nm CHAR(24))
+CREATE FUNCTION concatenate_name_(first_nm CHAR(24), last_nm CHAR(24))
 RETURNS CHAR(50) DETERMINISTIC
 BEGIN
   RETURN CONCAT('Customer name is ', first_nm, ' ', last_nm);
@@ -86,6 +92,7 @@ END //
 DELIMITER ;
 
 
+#inner join to view both customers and orders tables
 
 SELECT 
     c.*, o.*
@@ -96,11 +103,19 @@ FROM
         ON 
         c.customer_id = o.customer_id;
 
+SELECT
+country, teeth
+FROM bad_teeth bd
+INNER JOIN
+gdp 
+ON
+bd.country = g.country;
 
 SELECT first_name 
 FROM employees
 WHERE (location = "London");
 
+#query example - total revenue from the orders
 SELECT  (quantity*price) QP
 FROM orderDetails
 GROUP BY quantity, price 
@@ -108,8 +123,8 @@ ORDER BY QP ASC;
 
 SELECT quantity, price FROM orderDetails CROSS JOIN 
 
+#Showing all orders from a specific customer, sorted by the employee ID
 SELECT * FROM orders
 WHERE customer_id = 1000
 order by employee_ID ASC;
-
 
